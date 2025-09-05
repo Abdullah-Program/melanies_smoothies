@@ -8,5 +8,6 @@ dependencies:
   - snowflake-snowpark-python
   - pandas
   - streamlit
+  - pyarrow        # recommended for Snowpark <-> pandas conversion
   - pip:
       - altair
