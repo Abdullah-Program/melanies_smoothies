@@ -1,3 +1,9 @@
-# requrement.text
-snowflake-snowpark-python
-streamlit
+name: smoothies_env
+channels:
+  - snowflake
+  - defaults
+dependencies:
+  - python=3.9
+  - snowflake-snowpark-python
+  - pandas
+  - streamlit
