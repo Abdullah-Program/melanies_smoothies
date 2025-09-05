@@ -31,7 +31,9 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list:
-    ingredients_string = ''
+    # join ingredients safely with single spaces, no trailing space
+    ingredients_string = " ".join(ingredients_list).strip()
+
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
