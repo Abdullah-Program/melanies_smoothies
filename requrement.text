@@ -1,13 +1,3 @@
-name: smoothies_env
-channels:
-  - snowflake
-  - defaults
-dependencies:
-  - python=3.9
-  - pip
-  - snowflake-snowpark-python
-  - pandas
-  - streamlit
-  - pyarrow        # recommended for Snowpark <-> pandas conversion
-  - pip:
-      - altair
+# requirement.txt
+snowflake-snowpark-python
+streamlit
