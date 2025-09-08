@@ -16,31 +16,40 @@ my_dataframe = session.table('smoothies.public.fruit_options').select(col('FRUIT
 
 name_on_order = st.text_input('Name on Smoothie')
 st.write('The name on your Smoothie will be:', name_on_order)
+
 ingredients_list = st.multiselect('Choose up to 5 ingredients:', my_dataframe, max_selections=5)
 
 if ingredients_list:
-    # Build ingredients string cleanly with join (no trailing spaces)
-    ingredients_string = ' '.join(ingredients_list)
+    # ✅ Clean ingredients string (no extra spaces)
+    ingredients_string = " ".join([fruit.strip() for fruit in ingredients_list]).strip()
 
-    pd_df = my_dataframe.to_pandas()  # Move outside loop for efficiency
+    # ✅ Debug print to check spacing (remove later when all works)
+    st.text(f"DEBUG Ingredients String: >{ingredients_string}<")
+    st.text(f"DEBUG Name: >{name_on_order.strip()}<")
+
+    # Convert dataframe to pandas once
+    pd_df = my_dataframe.to_pandas()
 
     for fruit_chosen in ingredients_list:
         st.subheader(fruit_chosen + ' Nutrition Information')
 
-        # Use SEARCH_ON only for API
+        # Use SEARCH_ON for API
         search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
         fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + search_on)
 
         st.write(f"The search value for {fruit_chosen} is {search_on}")
         fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
-    # ✅ Build insert statement inside the same block
+    # ✅ Clean name_on_order too
+    clean_name = name_on_order.strip()
+
+    # Insert statement
     my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders(ingredients, name_on_order)
-        VALUES ('{ingredients_string}', '{name_on_order}')
+        insert into smoothies.public.orders(ingredients, name_on_order)
+        values ('{ingredients_string}','{clean_name}')
     """
 
     time_to_insert = st.button('Submit Order')
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
-        st.success(f"Your Smoothie is ordered, {name_on_order}!", icon="✅")
+        st.success('Your Smoothie is ordered, ' + clean_name + '!', icon="✅")
