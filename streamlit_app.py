@@ -34,11 +34,8 @@ if ingredients_list:
         st.write(f"The search value for {fruit_chosen} is {search_on}")
         fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
-    # Insert FRUIT_NAME string into orders (not SEARCH_ON!)
-    my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders (ingredients, name_on_order)
-        VALUES ('{ingredients_string}', '{name_on_order}')
-    """
+my_insert_stmt = f"insert into smoothies.public.orders(ingredients,name_on_order) values ('{ingredients_string}','{name_on_order}')"
+
 
     time_to_insert = st.button('Submit Order')
     if time_to_insert:
